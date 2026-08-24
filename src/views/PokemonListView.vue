@@ -12,19 +12,19 @@
         :pokemons="filteredList"
         :favorites="storeFavorites.getFavorites"
         @selected="handleSelectPokemon"
-        @addFavorite="handleAddFavorite"
+        @add-favorite="handleAddFavorite"
       />
-      <Loader v-else class="loader"/>
+      <BaseLoader v-else class="loader" />
       <BaseError
         v-if="error.length || (!filteredList.length && errorDataValue.length)"
-        :errorMessage="error || errorDataValue"
-        @backToHome="searchField = ''"
+        :error-message="error || errorDataValue"
+        @back-to-home="searchField = ''"
       />
     </div>
     <div class="containerFooter">
       <div class="containerSelectors">
         <BaseButton
-          :isSelected="btnAllSelected"
+          :is-selected="btnAllSelected"
           :type="btnTypeAll"
           @click="handleSelectorButton"
         >
@@ -32,7 +32,7 @@
           All
         </BaseButton>
         <BaseButton
-          :isSelected="!btnAllSelected"
+          :is-selected="!btnAllSelected"
           :type="btnTypeFavorites"
           @click="handleSelectorButton"
         >
@@ -51,9 +51,9 @@
         :weight="selected.weight"
         :height="selected.height"
         :types="selected.types"
-        :isFavorite="storeFavorites.isFavorite(selected.name)"
-        @closeModal="showModal = !showModal"
-        @addFavorite="handleAddFavorite"
+        :is-favorite="storeFavorites.isFavorite(selected.name)"
+        @close-modal="showModal = !showModal"
+        @add-favorite="handleAddFavorite"
       />
     </Teleport>
   </div>
@@ -64,15 +64,13 @@ import { ref, inject, onMounted, computed } from "vue";
 import BaseSearch from "../components/BaseSearch.vue";
 import BaseList from "../components/BaseList.vue";
 import BaseButton from "../components/BaseButton.vue";
-import Loader from "../components/Loader.vue";
+import BaseLoader from "../components/BaseLoader.vue";
 import BaseModal from "../components/BaseModal.vue";
 import BaseError from "../components/BaseError.vue";
 import { usePokemon } from "../composables/usePokemon";
 import { useFavoritesStore } from "../stores/useFavoritesStore.js";
-import { useStorage } from "../composables/useStorage.js";
 
 const storeFavorites = useFavoritesStore();
-const { saveToStorage, getDataStorage } = useStorage();
 
 const BaseIcons = inject("BaseIcons");
 const {
@@ -89,10 +87,8 @@ const btnAllSelected = ref(true);
 const showModal = ref(false);
 const selected = ref({});
 const searchField = ref('');
-const errorDataValue = ref('');
 
 const filteredList = computed(() => {
-  errorDataValue.value = "";
   let arrayPokemon = [];
   // get the list "general" or "favorites"
   if (btnAllSelected.value) {
@@ -108,13 +104,16 @@ const filteredList = computed(() => {
       return name.startsWith(queryLower) ||
         name.split(' ').some(word => word.startsWith(queryLower));
     });
-    // if there is no data to display...
-    if (!arrayPokemon.length) {
-      errorDataValue.value = 'You look lost on your journey!';
-    }
   }
 
   return arrayPokemon;
+});
+
+// message shown when a search yields no results
+const errorDataValue = computed(() => {
+  return searchField.value && !filteredList.value.length
+    ? 'You look lost on your journey!'
+    : '';
 });
 
 
@@ -138,18 +137,9 @@ const handleSelectPokemon = async (pokemon) => {
   setSelectedPokemon();
 }
 
-// save data in the Store (Pinia) and LocalStorage
+// add or remove a favorite (persisted to localStorage automatically by the store)
 const handleAddFavorite = (name) => {
   storeFavorites.addToFavorites(name);
-  saveToStorage('favoritesStorage', name);
-}
-
-// initializes the localStorage data and Pinia data
-const initializeStorage = () => {
-  const favoritesStorage = getDataStorage('favoritesStorage');
-  if (favoritesStorage && favoritesStorage.length) {
-    storeFavorites.initializeFavorites(favoritesStorage);
-  }
 }
 
 // set pokemon selected
@@ -165,7 +155,6 @@ const setSelectedPokemon = () => {
 }
 
 onMounted(() => {
-  initializeStorage();
   fetchPokemon();
 });
 </script>

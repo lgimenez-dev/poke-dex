@@ -1,28 +1,30 @@
+import { computed } from 'vue';
 import { defineStore } from 'pinia';
+import { useStorage } from '../composables/useStorage.js';
 
-export const useFavoritesStore = defineStore('favorites', {
-  state: () => ({
-    favorites: [],
-  }),
-  getters: {
-    // get a list of favorites
-    getFavorites: (state) => state.favorites,
-    // validates if the favorite already exists in the list
-    isFavorite: (state) => (pokemonName) => {
-      return state.favorites.some(name => name === pokemonName)
-    },
-  },
-  actions: {
-    // save a new favorite or remove the favorite from the list
-    addToFavorites(pokemonName) {
-      if (!this.isFavorite(pokemonName)) {
-        this.favorites.push(pokemonName);
-      } else {
-        this.favorites = this.favorites.filter(name => name !== pokemonName)
-      }
-    },
-    initializeFavorites(array) {
-      this.favorites = array.slice();
-    },
-  },
+export const useFavoritesStore = defineStore('favorites', () => {
+  const favorites = useStorage('favoritesStorage', []);
+
+  // get a list of favorites
+  const getFavorites = computed(() => favorites.value);
+  // validates if the favorite already exists in the list
+  const isFavorite = computed(() => (pokemonName) => {
+    return favorites.value.some(name => name === pokemonName);
+  });
+
+  // save a new favorite or remove the favorite from the list
+  const addToFavorites = (pokemonName) => {
+    if (!isFavorite.value(pokemonName)) {
+      favorites.value.push(pokemonName);
+    } else {
+      favorites.value = favorites.value.filter(name => name !== pokemonName);
+    }
+  };
+
+  return {
+    favorites,
+    getFavorites,
+    isFavorite,
+    addToFavorites,
+  };
 });

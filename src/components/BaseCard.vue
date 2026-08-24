@@ -6,7 +6,7 @@
         class="btnAddFavorites"
         :src="favorite ? BaseIcons.starActiveIcon : BaseIcons.starInactiveIcon"
         alt="pokeball icon"
-        @click="emit('addFavorite', name);"
+        @click="emit('addFavorite', name)"
       />
     </div>
   </div>
@@ -14,7 +14,7 @@
 
 
 <script setup>
-import { inject, defineProps, defineEmits } from "vue";
+import { inject } from "vue";
 
 const BaseIcons = inject("BaseIcons");
 
@@ -22,12 +22,10 @@ defineProps({
   name: {
     type: String,
     required: true,
-    default: '',
   },
   favorite: {
     type: Boolean,
     required: true,
-    default: false,
   },
 });
 

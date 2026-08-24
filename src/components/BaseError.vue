@@ -13,8 +13,7 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue';
-import BaseButton from "../components/BaseButton.vue";;
+import BaseButton from "../components/BaseButton.vue";
 
 defineProps({
   errorMessage: {

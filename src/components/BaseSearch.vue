@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { inject, defineEmits, defineProps } from "vue";
+import { inject } from "vue";
 
 defineProps({
   value: {

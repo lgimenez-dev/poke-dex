@@ -9,7 +9,7 @@
 defineProps({
   type: {
     type: String,
-    default: 'primary' | 'secondary' | 'tertiary',
+    default: 'primary',
   },
   isSelected: {
     type: Boolean,

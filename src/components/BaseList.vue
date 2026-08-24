@@ -1,17 +1,16 @@
 <template>
   <div>
-    <BaseCard v-for="(item, i) in pokemons" :key="i"
+    <BaseCard v-for="item in pokemons" :key="item.name"
       :name="item.name"
       :favorite="favorites?.includes(item.name)"
       @selected="emit('selected', $event)"
-      @addFavorite="emit('addFavorite', $event)"
+      @add-favorite="emit('addFavorite', $event)"
     />
   </div>
 </template>
 
 <script setup>
 import BaseCard from "./BaseCard.vue";
-import { defineProps, defineEmits } from "vue";
 
 defineProps({
   pokemons: {

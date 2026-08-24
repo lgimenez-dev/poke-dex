@@ -21,7 +21,7 @@
 </template>
 
 
-<script lang="ts" setup>
+<script setup>
 import { inject } from 'vue';
 import BaseButton from '../components/BaseButton.vue';
 import {useRouter} from 'vue-router';

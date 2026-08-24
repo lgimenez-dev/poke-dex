@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { inject, defineProps, defineEmits } from "vue";
+import { inject } from "vue";
 import BaseButton from "./BaseButton.vue";
 
 const BaseIcons = inject('BaseIcons');

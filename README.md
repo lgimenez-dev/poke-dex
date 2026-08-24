@@ -3,8 +3,6 @@
 This project is a responsive Pokédex web app built in **Vue.js + Vite** and designed for exploring the Pokémon and their characteristics.
 The app allows you to collect Pokemon by saving them to your favorites or check their personal information such as weight, height and type.
 
-Deploy = [link](https://pokedex-psi-hazel.vercel.app/welcome)
-
 <img src="https://github.com/user-attachments/assets/7398c77e-7af3-41ba-862e-8338f15629dd" width="450px"/>
 
 <img src="https://github.com/user-attachments/assets/57ad397c-6c86-4cc1-83aa-a939a7ff2d54" width="0px"/>
@@ -24,18 +22,18 @@ Deploy = [link](https://pokedex-psi-hazel.vercel.app/welcome)
 
 ### Prerequisites:
 Before you begin, make sure you have the following programs installed:
-- Node.js (version 14 or higher)
-- npm (version 6 or higher)
+- Node.js (version 18 or higher)
+- pnpm (version 9 or higher)
 
 ### How to start:
 To install the project dependencies, run the following command in your terminal:
 ```text
-npm install
+pnpm install
 ```
 
 To start the application in development mode, run the following command:
 ```text
-npm run dev
+pnpm dev
 ```
 
 

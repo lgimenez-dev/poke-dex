@@ -1,28 +1,13 @@
-export function useStorage() {
-  // save new data to storage
-  const saveToStorage = (key, value) => {
-    if (!key) {
-      return false;
-    }
-    let listData = getDataStorage(key);
-    if (!listData.includes(value)) {
-      listData.push(value);
-    } else {
-      listData = listData.filter((item) => {
-        return item !== value;
-      });
-    }
-    localStorage.setItem(key, JSON.stringify(listData));
-  };
+import { ref, watch } from 'vue';
 
-  // get all data from storage
-  const getDataStorage = (key) => {
-    const isExist = localStorage.getItem(key);
-    return isExist ? JSON.parse(localStorage.getItem(key)) : [];
-  };
+// reactive ref synced with localStorage under the given key
+export function useStorage(key, defaultValue = []) {
+  const stored = localStorage.getItem(key);
+  const data = ref(stored ? JSON.parse(stored) : defaultValue);
 
-  return {
-    saveToStorage,
-    getDataStorage,
-  }
+  watch(data, (value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, { deep: true });
+
+  return data;
 }
