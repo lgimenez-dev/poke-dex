@@ -51,7 +51,7 @@
         :weight="selected.weight"
         :height="selected.height"
         :types="selected.types"
-        :is-favorite="storeFavorites.isFavorite(selected.name)"
+        :is-favorite="storeFavorites.isFavorite(selected.name ?? '')"
         @close-modal="showModal = !showModal"
         @add-favorite="handleAddFavorite"
       />
@@ -59,20 +59,21 @@
   </div>
 </template>
 
-<script setup>
-import { ref, inject, onMounted, computed } from "vue";
-import BaseSearch from "../components/BaseSearch.vue";
-import BaseList from "../components/BaseList.vue";
-import BaseButton from "../components/BaseButton.vue";
-import BaseLoader from "../components/BaseLoader.vue";
-import BaseModal from "../components/BaseModal.vue";
-import BaseError from "../components/BaseError.vue";
-import { usePokemon } from "../composables/usePokemon";
-import { useFavoritesStore } from "../stores/useFavoritesStore.js";
+<script setup lang="ts">
+import { ref, onMounted, computed } from "vue";
+import BaseSearch from "@/components/BaseSearch.vue";
+import BaseList from "@/components/BaseList.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import BaseLoader from "@/components/BaseLoader.vue";
+import BaseModal from "@/components/BaseModal.vue";
+import BaseError from "@/components/BaseError.vue";
+import BaseIcons from "@/assets/icons/BaseIcons";
+import { usePokemon } from "@/composables/usePokemon";
+import { useFavoritesStore } from "@/stores/useFavoritesStore";
+import type { PokemonSummary, SelectedPokemon } from "@/types/pokemon";
 
 const storeFavorites = useFavoritesStore();
 
-const BaseIcons = inject("BaseIcons");
 const {
   pokemonList,
   pokemonSearch,
@@ -81,15 +82,15 @@ const {
   fetchPokemon,
   fetchPokemonByName,
 } = usePokemon();
-const btnTypeAll = ref("primary");
-const btnTypeFavorites = ref("tertiary");
+const btnTypeAll = ref<'primary' | 'secondary' | 'tertiary'>("primary");
+const btnTypeFavorites = ref<'primary' | 'secondary' | 'tertiary'>("tertiary");
 const btnAllSelected = ref(true);
 const showModal = ref(false);
-const selected = ref({});
+const selected = ref<Partial<SelectedPokemon>>({});
 const searchField = ref('');
 
 const filteredList = computed(() => {
-  let arrayPokemon = [];
+  let arrayPokemon: PokemonSummary[] = [];
   // get the list "general" or "favorites"
   if (btnAllSelected.value) {
     arrayPokemon = pokemonList.value;
@@ -131,14 +132,14 @@ const handleSelectorButton = () => {
 };
 
 // event to find and show the pokemon selected in the modal
-const handleSelectPokemon = async (pokemon) => {
+const handleSelectPokemon = async (pokemon: string) => {
   await fetchPokemonByName(pokemon);
   showModal.value = !error.value;
   setSelectedPokemon();
 }
 
 // add or remove a favorite (persisted to localStorage automatically by the store)
-const handleAddFavorite = (name) => {
+const handleAddFavorite = (name: string) => {
   storeFavorites.addToFavorites(name);
 }
 
@@ -146,7 +147,7 @@ const handleAddFavorite = (name) => {
 const setSelectedPokemon = () => {
   selected.value = {
     id: pokemonSearch.value?.id,
-    image: pokemonSearch.value?.sprites?.other?.['official-artwork']?.front_default,
+    image: pokemonSearch.value?.sprites?.other?.['official-artwork']?.front_default ?? undefined,
     name: pokemonSearch.value?.name,
     weight: pokemonSearch.value?.weight,
     height: pokemonSearch.value?.height,

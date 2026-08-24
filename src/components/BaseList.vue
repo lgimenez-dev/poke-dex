@@ -9,22 +9,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseCard from "./BaseCard.vue";
+import type { PokemonSummary } from "@/types/pokemon";
 
-defineProps({
-  pokemons: {
-    type: Array,
-    required: true,
-  },
-  favorites: {
-    type: Array,
-    required: true,
-  },
-});
+defineProps<{
+  pokemons: PokemonSummary[];
+  favorites: string[];
+}>();
 
-const emit = defineEmits(['selected', 'addFavorite']);
-
+const emit = defineEmits<{
+  selected: [name: string];
+  addFavorite: [name: string];
+}>();
 </script>
 
 <style scoped></style>

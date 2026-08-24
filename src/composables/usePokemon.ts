@@ -1,9 +1,10 @@
 import { ref } from "vue";
-import { pokeApi } from "../api/pokeApi";
+import { pokeApi } from "@/api/pokeApi";
+import type { PokemonDetail, PokemonSummary } from "@/types/pokemon";
 
 export function usePokemon() {
-  const pokemonList = ref([]);
-  const pokemonSearch = ref([]);
+  const pokemonList = ref<PokemonSummary[]>([]);
+  const pokemonSearch = ref<PokemonDetail | null>(null);
   const loading = ref(false);
   const error = ref("");
 
@@ -14,7 +15,7 @@ export function usePokemon() {
     try {
       const response = await pokeApi.get();
       pokemonList.value = response.results;
-    } catch (err) {
+    } catch {
       error.value = "Failed to load data."
     } finally {
       loading.value = false;
@@ -22,14 +23,14 @@ export function usePokemon() {
   };
 
   // get the pokemon with the name passed in the parameter
-  const fetchPokemonByName = async (name) => {
+  const fetchPokemonByName = async (name: string) => {
     loading.value = true;
     error.value = "";
-    pokemonSearch.value = [];
+    pokemonSearch.value = null;
     try {
       const response = await pokeApi.getByName(name);
       pokemonSearch.value = response;
-    } catch (err) {
+    } catch {
       error.value = "Failed to load data."
     } finally {
       loading.value = false;

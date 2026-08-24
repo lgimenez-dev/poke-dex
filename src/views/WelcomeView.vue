@@ -21,14 +21,12 @@
 </template>
 
 
-<script setup>
-import { inject } from 'vue';
-import BaseButton from '../components/BaseButton.vue';
-import {useRouter} from 'vue-router';
+<script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue';
+import { useRouter } from 'vue-router';
+import BaseImages from '@/assets/img/BaseImages';
 
 const router = useRouter();
-
-const BaseImages = inject('BaseImages');
 </script>
 
 

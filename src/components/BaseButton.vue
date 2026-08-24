@@ -5,18 +5,17 @@
 </template>
 
 
-<script setup>
-defineProps({
-  type: {
-    type: String,
-    default: 'primary',
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    type?: 'primary' | 'secondary' | 'tertiary';
+    isSelected?: boolean;
+  }>(),
+  {
+    type: 'primary',
+    isSelected: false,
   },
-  isSelected: {
-    type: Boolean,
-    default: false,
-  },
-});
-
+);
 </script>
 
 

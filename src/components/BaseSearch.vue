@@ -7,24 +7,27 @@
         placeholder="Search"
         v-bind="$attrs"
         :value="value"
-        @input="emit('update', $event.target.value)"
+        @input="emit('update', ($event.target as HTMLInputElement).value)"
       />
     </div>
   </div>
 </template>
 
-<script setup>
-import { inject } from "vue";
+<script setup lang="ts">
+import BaseIcons from "@/assets/icons/BaseIcons";
 
-defineProps({
-  value: {
-    type: String,
-    default: '',
-  }
-})
+withDefaults(
+  defineProps<{
+    value?: string;
+  }>(),
+  {
+    value: '',
+  },
+);
 
-const BaseIcons = inject("BaseIcons");
-const emit = defineEmits(['update']);
+const emit = defineEmits<{
+  update: [value: string];
+}>();
 </script>
 
 <style scoped>

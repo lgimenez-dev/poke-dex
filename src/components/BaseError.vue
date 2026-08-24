@@ -12,15 +12,19 @@
   </div>
 </template>
 
-<script setup>
-import BaseButton from "../components/BaseButton.vue";
+<script setup lang="ts">
+import BaseButton from "./BaseButton.vue";
 
-defineProps({
-  errorMessage: {
-    type: String,
-    default: '',
-  }
-})
+withDefaults(
+  defineProps<{
+    errorMessage?: string;
+  }>(),
+  {
+    errorMessage: '',
+  },
+);
 
-const emit = defineEmits(['backToHome']);
+const emit = defineEmits<{
+  backToHome: [];
+}>();
 </script>

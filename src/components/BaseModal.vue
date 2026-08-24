@@ -55,40 +55,33 @@
   </div>
 </template>
 
-<script setup>
-import { inject } from "vue";
+<script setup lang="ts">
+import BaseIcons from "@/assets/icons/BaseIcons";
 import BaseButton from "./BaseButton.vue";
 
-const BaseIcons = inject('BaseIcons');
+const props = withDefaults(
+  defineProps<{
+    image?: string;
+    name?: string;
+    weight?: number;
+    height?: number;
+    types?: string;
+    isFavorite?: boolean;
+  }>(),
+  {
+    image: '-',
+    name: '-',
+    weight: 0,
+    height: 0,
+    types: '-',
+    isFavorite: false,
+  },
+);
 
-const props = defineProps({
-  image: {
-    type: String,
-    default: '-',
-  },
-  name: {
-    type: String,
-    default: '-',
-  },
-  weight: {
-    type: Number,
-    default: 0,
-  },
-  height: {
-    type: Number,
-    default: 0,
-  },
-  types: {
-    type: String,
-    default: '-',
-  },
-  isFavorite: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const emit = defineEmits([ 'closeModal', 'addFavorite' ]);
+const emit = defineEmits<{
+  closeModal: [value: boolean];
+  addFavorite: [name: string];
+}>();
 
 const copyToClipboard = () => {
   navigator.clipboard.writeText(JSON.stringify([

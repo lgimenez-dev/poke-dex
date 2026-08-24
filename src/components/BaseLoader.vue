@@ -4,9 +4,8 @@
   </div>
 </template>
 
-<script setup>
-import { inject } from 'vue';
-const BaseImages = inject('BaseImages');
+<script setup lang="ts">
+import BaseImages from '@/assets/img/BaseImages';
 </script>
 
 <style scoped>

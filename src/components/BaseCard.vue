@@ -13,23 +13,18 @@
 </template>
 
 
-<script setup>
-import { inject } from "vue";
+<script setup lang="ts">
+import BaseIcons from "@/assets/icons/BaseIcons";
 
-const BaseIcons = inject("BaseIcons");
+defineProps<{
+  name: string;
+  favorite: boolean;
+}>();
 
-defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  favorite: {
-    type: Boolean,
-    required: true,
-  },
-});
-
-const emit = defineEmits(['addFavorite', 'selected']);
+const emit = defineEmits<{
+  addFavorite: [name: string];
+  selected: [name: string];
+}>();
 </script>
 
 
